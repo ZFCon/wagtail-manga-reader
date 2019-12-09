@@ -1,2 +1,2 @@
 # wagtail-manga-reader
-wagtail manga reader
+Still under development...
