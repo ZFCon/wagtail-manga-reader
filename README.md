@@ -24,3 +24,7 @@ pip install -r requirements.txt
 
 ## ScreenShot
 
+![screencapture-127-0-0-1-8000-2019-12-26-21_26_32](https://user-images.githubusercontent.com/26200198/71488043-25215b00-2827-11ea-8c0f-463bac49618f.png)
+![screencapture-127-0-0-1-8000-hero-academy-2019-12-26-21_26_53](https://user-images.githubusercontent.com/26200198/71488046-25b9f180-2827-11ea-9fb3-baa7a9da2858.png)
+![screencapture-127-0-0-1-8000-dr-stone-2019-12-26-21_27_10](https://user-images.githubusercontent.com/26200198/71488047-26eb1e80-2827-11ea-934c-2806547aae80.png)
+
