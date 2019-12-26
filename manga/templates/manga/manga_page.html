@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static wagtailuserbar %}
+
+{% block content %}
+
+<!-- load wagtail img -->
+{% load wagtailimages_tags %}
+<!-- load wagtail core-->
+{% load wagtailcore_tags %}
+
+<!-- start reading intro -->
+<div class="container my-5">
+    <div class="read-intro bg-light text-lg-left text-sm-center px-5 py-5">
+        {% if request.user.is_authenticated %}
+            {% if request.GET.save %}
+                {% if request.GET.save == '1' %}
+                    <a href="{% pageurl page %}?save=0"><i class="fas fa-bookmark fa-3x"></i></a>
+                {% elif request.GET.save == '0' %}
+                    <a href="{% pageurl page %}?save=1"><i class="far fa-bookmark fa-3x"></i></a>
+                {% endif %}
+            {% else %}
+                {% if item_saved %}
+                    <a href="{% pageurl page %}?save=0"><i class="fas fa-bookmark fa-3x"></i></a>
+                {% elif not item_saved %}
+                    <a href="{% pageurl page %}?save=1"><i class="far fa-bookmark fa-3x"></i></a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        <div class="row">
+            <div class="cover col-*">
+                {% image page.cover width-250 as ch_cover %}
+                <img class="shadow" src="{{ ch_cover.url }}" alt="{{ ch_cover.alt }}" width="{{ ch_cover.width }}">
+            </div>
+            <div class="info col">
+                <h2 class="head">{{ page.title }}</h2>
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Genre:</th>
+                            <td>
+                                {% for genre in page.genre.all %}
+                                <span class="badge badge-info px-2 py-2">{{ genre }}</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Artist:</th>
+                            <td>{{ page.artist }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Rating:</th>
+                            <td>
+                                <!--<i class="fa fa-star fa-2x"></i>-->
+                                <span class="font-weight-bold">(10/{{ page.rating }})</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    {{ page.description|richtext }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end reading intro -->
+
+<!-- start intro lists -->
+<div class="container my-5 bg-white" id="intro-lists">
+    <div class="row bg-light py-3 pl-3">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" class="active" href="#ch">Ch.</a></li>
+            <li><a data-toggle="tab" href="#related">Related</a></li>
+            <li><a data-toggle="tab" href="#gallery">Gallery</a></li>
+        </ul>
+    </div>
+    <div class="tab-content">
+
+        <!-- start ch -->
+        <div id="ch" class="tab-pane fade in active show">
+            <div class="row">
+                <table class="table table-striped">
+                    <tbody>
+                        {% for ch in page.get_children %}
+                        <tr>
+                            <th><a href="{{ ch.url }}">Ch. {{ ch }}</a></th>
+                            <td class="text-muted text-uppercase float-right">{{ ch.first_published_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- end ch -->
+
+        <!-- start related -->
+        <div id="related" class="tab-pane fade">
+            <div class="row">
+                <!-- start related -->
+                {% for item in related|slice:'4' %}
+                <div class="col-lg-3 col-md-4 col-6">
+                    <a href="{{ item.url }}">
+                        <div class="card mb-3">
+                            {% image item.cover width-250 as related_cover %}
+                            <img src="{{ related_cover.url }}" class="card-img-top" alt="{{ related_cover.alt }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- end related -->
+
+        <!-- start gallery -->
+        <div id="gallery" class="tab-pane fade">
+            <div class="row py-3">
+                {% for item in page.get_children %}
+                <div class="col-lg-3 col-md-4 col-6">
+                    <a href="{{ item.url }}">
+                        {% image item.specific.cover width-250 as gallery_cover %}
+                        <img src="{{ gallery_cover.url }}" alt="{{ gallery_cover.alt }}" style="width: 100%;">
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- end gallery-->
+
+    </div>
+</div>
+<!-- end ch. list -->
+{% endblock content %}

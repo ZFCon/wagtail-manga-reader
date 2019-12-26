@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+<!-- load static file-->
+{% load static wagtailuserbar %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pdf_viewer.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container text-center pb-5">
+  <div class="row py-3">
+    <div class="col">
+      <a class="btn btn-light float-right" href="{{ page.get_parent.url }}">go to manga page &gt;</a>
+    </div>
+  </div>
+  <canvas id="pdf-render"></canvas>
+
+  <div class="top-bar">
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-light" id="prev-page">
+          <i class="fas fa-arrow-circle-left"></i> Prev
+        </button>
+      </div>
+      <div class="col">
+        <span class="page-info">
+          Page <span id="page-num"></span> of <span id="page-count"></span>
+        </span>
+      </div>
+      <div class="col">
+        <button class="btn btn-light" id="next-page">
+          Next <i class="fas fa-arrow-circle-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+<script>const url = '{{ page.chapter.url }}';</script>
+<script src="{% static 'js/pdf_viewer.js' %}"></script>
+{% endblock %}

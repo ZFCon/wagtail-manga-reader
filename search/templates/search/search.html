@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block body_class %}template-searchresults{% endblock %}
+
+{% block title %}Search{% endblock %}
+<!-- load wagtail img -->
+{% load wagtailimages_tags %}
+
+{% block content %}
+<div class="container">
+    <h1>Search</h1>
+    {% if search_results %}
+    <div class="posts row">
+        {% for result in search_results %}
+        <div class="col-lg-3 col-md-4 col-sm-5 col-6">
+            <div class="card mb-3">
+                {% image result.cover width-250 as cover %}
+                <a href="{% pageurl result %}"><img src="{{ cover.url }}" class="card-img-top" alt="{{ cover.alt }}"
+                        data-toggle="tooltip" data-placement="right" data-html='true'
+                        title="<h3>{{ result }}</h3><hr>{{ result.description|truncatewords:40 }}"></a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% pageurl result %}">{{ result }}</a></h5>
+                    <p class="card-text"><small
+                            class="text-muted text-uppercase">{{ result.first_published_at }}</small></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row my-3">
+        {% if search_results.has_previous %}
+        <div class="col">
+            <a class="btn btn-light float-left"
+                href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
+        </div>
+        {% endif %}
+
+        {% if search_results.has_next %}
+        <div class="col">
+            <a class="btn btn-light float-right"
+                href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
+        </div>
+        {% endif %}
+    </div>
+
+    {% elif search_query %}
+    No results found
+    {% endif %}
+</div>
+{% endblock %}

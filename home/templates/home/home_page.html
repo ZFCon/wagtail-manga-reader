@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block extra_css %}
+
+{% endblock extra_css %}
+
+{% block content %}
+
+<!-- load wagtail img -->
+{% load wagtailimages_tags %}
+<!-- load wagtail core-->
+{% load wagtailcore_tags %}
+
+{% if page.active_slider %}
+<!-- start slider -->
+<div id="mangaslider" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        {% for item in page.slider_image.all %}
+        {% image item.slider_image width-1200 as slider %}
+        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+            <img class="d-block w-100" src="{{ slider.url }}" alt="{{ slider.alt }}">
+        </div>
+        {% endfor %}
+    </div>
+    <a class="carousel-control-prev" href="#mangaslider" role="button" data-slide="prev">
+        <div><span class="carousel-control-prev-icon" aria-hidden="true"></span></div>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#mangaslider" role="button" data-slide="next">
+        <div><span class="carousel-control-next-icon" aria-hidden="true"></span></div>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+{% endif %}
+<!-- end slider -->
+
+<!-- start lastest -->
+<div class="lastest container mt-4 mt-sm-5">
+    <!-- start lastest full manga -->
+    {% if page.active_full_manga_lastest %}
+    <h2 class="font-weight-bolder my-3">Lastest Manga</h2>
+    <div class="posts row">
+        <!-- start post -->
+        {% for post in full_manga %}
+        {% image post.cover width-250 as cover %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <div class="card mb-3">
+                <a href="{{ post.url }}" data-toggle="tooltip" data-placement="right" data-html='true' title="<h3>{{ post }}</h3><hr>{{ post.description|truncatewords:40 }}"><img src="{{ cover.url }}" class="card-img-top" alt="{{ cover.alt }}" ></a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ post.url }}">{{ post }}</a>
+                    </h5>
+                    <p class="card-text"><small class="text-muted text-uppercase">{{ post.first_published_at }}</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- end post-->
+    </div>
+    {% endif %}
+    <!-- end lastest full manga -->
+
+    {% if page.active_lastest %}
+    <h2 class="font-weight-bolder my-3">Lastest Manga Chapters</h2>
+    <div class="posts row">
+        <!-- start post -->
+        {% for post in posts %}
+        {% image post.cover width-250 as cover %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <div class="card mb-3">
+                <a href="{{ post.url }}" data-toggle="tooltip" data-placement="right" data-html='true' title="<h4>Ch. {{ post }} {{ post.get_parent }}</h4><hr>{{ post.get_ancestors.last.specific.description|truncatewords:40 }}"><img src="{{ cover.url }}" class="card-img-top" alt="{{ cover.alt }}"></a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ post.url }}">Ch. {{ post }} - {{ post.get_ancestors.last }}</a>
+                    </h5>
+                    <p class="card-text">Ch. {{ post }}</p>
+                    <p class="card-text"><small class="text-muted text-uppercase">{{ post.first_published_at }}</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- end post-->
+    </div>
+    {% endif %}
+
+</div>
+<!-- end lastest -->
+
+{% endblock content %}

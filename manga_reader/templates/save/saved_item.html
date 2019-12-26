@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block title %}Saved items{% endblock %}
+<!-- load wagtail img -->
+{% load wagtailimages_tags %}
+
+{% block content %}
+<div class="container my-5">
+    <h1>Saved items</h1>
+    <div class="posts row">
+        {% for post in items|dictsortreversed:'timestamp' %}
+        {% image post.content_object.cover width-250 as cover %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+            <div class="card mb-3">
+                <a href="{{ post.content_object.url }}" data-toggle="tooltip" data-placement="right" data-html='true'
+                    title="<h3>{{ post }}</h3><hr>{{ post.content_object.description|truncatewords:40 }}"><img src="{{ cover.url }}"
+                        class="card-img-top" alt="{{ cover.alt }}"></a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ post.content_object.url }}">{{ post }}</a>
+                    </h5>
+                    <p class="card-text"><small class="text-muted text-uppercase">{{ post.content_object.first_published_at }}</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
